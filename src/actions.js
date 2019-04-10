@@ -4,13 +4,13 @@ export const ActionCreators = {}
 export function addAction (actionName, action, actionCreator, sandboxName) {
   // Make sure the name is unique
   if (sandboxName) {
-    if (typeof Actions[sandboxName] === 'function' && (!module || !module.hot)) {
-      throw new Error(`An action called "${sandboxName}" already exists! Please pick another sandbox name!`)
+    if (typeof Actions[sandboxName] === 'function') {
+      return // throw new Error(`An action called "${sandboxName}" already exists! Please pick another sandbox name!`)
     }
     Actions[sandboxName] = Actions[sandboxName] || {}
     ActionCreators[sandboxName] = ActionCreators[sandboxName] || {}
-    if (Actions[sandboxName][actionName] && (!module || !module.hot)) {
-      throw new Error(`An action called "${actionName}" in the ${sandboxName} sandbox already exists! Please pick another action name!`)
+    if (Actions[sandboxName][actionName]) {
+      return // throw new Error(`An action called "${actionName}" in the ${sandboxName} sandbox already exists! Please pick another action name!`)
     }
 
     Actions[sandboxName][actionName] = payload => action(payload)
@@ -19,8 +19,8 @@ export function addAction (actionName, action, actionCreator, sandboxName) {
   }
 
   // No need to add the action a second time.
-  if (typeof Actions[actionName] === 'object' && (!module || !module.hot)) {
-    throw new Error(`An action called "${actionName}" in the ${sandboxName} sandbox already exists! Please pick another action name!`)
+  if (typeof Actions[actionName] === 'object') {
+    return // throw new Error(`An action called "${actionName}" in the ${sandboxName} sandbox already exists! Please pick another action name!`)
   }
   if (Actions[actionName]) {
     return true
@@ -31,8 +31,8 @@ export function addAction (actionName, action, actionCreator, sandboxName) {
 
 export function addEffect (effectName, action, actionCreator) {
   // Make sure the effect name is unique
-  if (Actions[effectName] && (!module || !module.hot)) {
-    throw new Error(`An action called "${effectName}" already exists! Please pick another name for this effect!`)
+  if (Actions[effectName]) {
+    return // throw new Error(`An action called "${effectName}" already exists! Please pick another name for this effect!`)
   }
   Actions[effectName] = payload => action(payload)
   ActionCreators[effectName] = actionCreator
